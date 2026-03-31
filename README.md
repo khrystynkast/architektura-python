@@ -58,3 +58,77 @@ Plik testowy
 - test2_1.py - plik pomocniczy/testowy do wybranych zadań
 
 
+### Zadania tydzień 3-4
+
+Repozytorium zawiera rozwiązania zadań z przedmiotu Architektura aplikacji w Pythonie dotyczących programowania współbieżnego i równoległego.
+W folderze`tyd3-4`  znajdują się wszystkie pliki wykonane w ramach tygodnia 3–4.
+
+---
+
+### Zawartość folderu `tyd1-2`
+
+Lab2_Concurrency_Multi_MAIN_FILE.ipynb — notebook z zajęć (wprowadzenie do threading, queue, multiprocessing)
+
+lab2_functions.py — funkcje pomocnicze wykorzystywane w zadaniu 3
+(`is_prime`, `find_primes`, `calculate_power_sum`)
+
+---
+
+## Zadanie 1 - Cat Facts API (Threading)
+
+Plik: `zadanie_1.py`
+
+Program pobiera 20 faktów o kotach z publicznego API:
+`https://catfact.ninja/fact`
+
+Zadanie obejmuje dwie wersje:
+1. Wersja sekwencyjna
+* 20 zapytań wykonywanych jedno po drugim
+* pomiar czasu wykonania
+
+2. Wersja wielowątkowa (ThreadPoolExecutor)
+* 20 zapytań wykonywanych równolegle
+* znaczące przyspieszenie działania
+
+Technologie:
+* `requests`
+* `concurrent.futures.ThreadPoolExecutor`
+* pomiar czasu (`time.time()`)
+
+---
+
+## Zadanie 2 — Producent–Konsumenci (Queue + Threads)
+
+Plik: `zadanie_2.py`
+
+Implementacja klasycznego wzorca Producer–Consumer:
+* Producent generuje kolejne liczby naturalne i dodaje je do kolejki.
+* Konsument 1 przetwarza liczby parzyste.
+* Konsument 2 przetwarza liczby nieparzyste.
+* Komunikacja odbywa się przez queue.Queue.
+* Program kończy się po przetworzeniu określonej liczby liczb.
+
+Technologie:
+* `threading.Thread`
+* `queue.Queue`
+* sygnały STOP (`None`)
+* poprawne użycie `q.task_done()` i `q.join()`
+
+---
+
+## Zadanie 3 — Multiprocessing (CPU-bound)
+
+Plik: `zadanie_3.py`
+
+Program porównuje czas wykonania obliczeń:
+* wersja sekwencyjna
+* wersja równoległa z multiprocessing
+
+Wykorzystuje funkcję:
+`calculate_power_sum(n)`
+która oblicza sumę potęg liczby n od 1 do 100 — operacja kosztowna obliczeniowo, idealna do multiprocessing.
+
+Technologie:
+* `multiprocessing.Pool`
+* mapowanie funkcji na wiele procesów
+* pomiar czasu
