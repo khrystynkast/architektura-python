@@ -57,6 +57,7 @@ Wykorzystuje:
 Plik testowy
 - test2_1.py - plik pomocniczy/testowy do wybranych zadań
 
+--- 
 
 ### Zadania tydzień 3-4
 
@@ -65,7 +66,7 @@ W folderze`tyd3-4`  znajdują się wszystkie pliki wykonane w ramach tygodnia 3�
 
 ---
 
-### Zawartość folderu `tyd1-2`
+### Zawartość folderu `tyd3-4`
 
 Lab2_Concurrency_Multi_MAIN_FILE.ipynb — notebook z zajęć (wprowadzenie do threading, queue, multiprocessing)
 
@@ -132,3 +133,64 @@ Technologie:
 * `multiprocessing.Pool`
 * mapowanie funkcji na wiele procesów
 * pomiar czasu
+
+---
+### Zadania tydzień 5-6
+
+Folder `tyd5-6` zawiera implementację klasy Product oraz zestaw testów jednostkowych przygotowanych w dwóch technologiach: unittest oraz pytest.
+
+---
+
+### Zawartość folderu `tyd5-6`
+
+`product.py` — implementacja klasy Product wraz z metodami biznesowymi
+`__init__.py` — plik inicjalizujący pakiet
+`tests/` — katalog zawierający testy jednostkowe
+`test_product_unittest.py` — testy w stylu unittest
+`test_product_pytest.py` — testy w stylu pytest
+`.venv/` — środowisko wirtualne (wykluczone z repozytorium)
+
+
+---
+
+## Zadanie 1 - Implementacja klasy Product i testy jednostkowe w unittest
+
+Plik: `product.py`
+Plik: `tests/test_product_unittest.py`
+
+Klasa reprezentuje produkt w sklepie internetowym i zawiera:
+* `add_stock(amount)` — dodawanie ilości produktu
+* `remove_stock(amount)` — usuwanie ilości produktu
+* `is_available()` — sprawdzanie dostępności
+* `total_value()` — obliczanie wartości magazynowej
+* `apply_discount(percent)` — obniżanie ceny o podany procent (0–100)
+
+Wszystkie metody zawierają walidację danych i rzucają ValueError w przypadku błędnych wartości.
+
+Testy obejmują:
+* poprawne działanie metod (add_stock, remove_stock, total_value)
+* testy wyjątków (ValueError)
+* wykorzystanie metody setUp() do przygotowania obiektu testowego
+
+Uruchamianie:
+```
+python -m unittest discover -v
+```
+
+---
+
+## Zadanie 2 + dodatkowe zadanie — Testy jednostkowe w pytest
+
+Plik: `tests/test_product_pytest.py`
+
+Testy przygotowane z użyciem biblioteki pytest, zgodnie z dobrymi praktykami:
+* `@pytest.fixture` — tworzenie instancji `Product`
+* `@pytest.mark.parametrize` — testy parametryzowane
+* `pytest.raises(ValueError)` — testowanie wyjątków
+* testy metody `apply_discount`
+Uruchamianie:
+```
+pytest -v
+
+pytest tests/test_product_pytest.py -v 
+```
