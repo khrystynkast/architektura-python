@@ -194,3 +194,106 @@ pytest -v
 
 pytest tests/test_product_pytest.py -v 
 ```
+
+---
+### Zadania tydzień 7-8
+
+Folder `tyd7-8` zawiera rozwiązania zadań dotyczących pracy z bazami danych SQL oraz NoSQL (MongoDB), a także symulację wyszukiwania wektorowego (vector search) z użyciem numpy.
+
+---
+
+### Zawartość folderu `tyd7-8`
+
+`zadanie1.py` — pobieranie danych z Random User API i zapis do bazy SQL
+`zadanie2.py` — pobieranie danych z API GeckoTerminal i zapis do MongoDB
+`zadanie3.py` — symulacja wyszukiwania wektorowego (pgvector) w czystym Pythonie
+
+
+---
+
+## Zadanie 1 - Random User API + SQL (PostgreSQL lub SQLite)
+
+Plik: `zadanie1.py`
+
+Program pobiera 30 użytkowników z publicznego API:
+```
+https://randomuser.me/api/?results=30
+```
+Następnie:
+1. Tworzy tabelę users w bazie SQL (SQLite lub PostgreSQL)
+2. Zapisuje dane każdego użytkownika:
+* imię
+* nazwisko
+* email
+* adres (miasto + kraj)
+* wiek
+* płeć
+3.Wykonuje zapytania analityczne SQL:
+* Ile jest mężczyzn, a ile kobiet?
+* Jaki jest średni wiek użytkowników?
+* W ilu różnych krajach mieszkają?
+```
+SELECT gender, COUNT(*) FROM users GROUP BY gender;
+
+SELECT AVG(age) FROM users;
+
+SELECT COUNT(DISTINCT country) FROM users;
+
+```
+
+Technologie:
+* requests
+* sqlite3 
+* SQL (CREATE TABLE, INSERT, SELECT, GROUP BY)
+
+Uruchamianie:
+```
+python zadanie1.py
+```
+
+---
+
+## Zadanie 2 - MongoDB + API GeckoTerminal
+
+Plik: `zadanie2.py`
+
+Program pobiera listę sieci kryptowalutowych z API:
+```
+https://api.geckoterminal.com/api/v2/networks
+```
+Następnie:
+* Łączy się z lokalnym serwerem MongoDB
+* Czyści kolekcję networks
+* Wstawia pobrane dokumenty jako JSON
+* Wykonuje agregację `$group` i `$sort`, aby policzyć liczbę sieci per typ (`coingecko_asset_platform_id`)
+
+Technologie:
+* `pymongo`
+* `requests`
+* agregacje MongoDB (`$group`, `$sort`)
+
+Uruchamianie:
+```
+python zadanie2.py
+
+```
+
+## Zadanie 3 - BONUS - Wyszukiwanie wektorowe (symulacja pgvector)
+
+Plik: `zadanie3.py`
+
+Program demonstruje działanie wyszukiwania semantycznego opartego na embeddingach.
+* bazę 5 nowoczesnych filmów z embeddingami `VECTOR(3)`
+* funkcję `cosine_similarity()`
+* funkcję `semantic_search(query, database, top_k)`
+* wyszukiwanie 3 najbardziej podobnych filmów do wektora zapytania
+
+Technologie:
+* `numpy`
+* cosine similarity
+* sortowanie wyników według podobieństwa
+
+Uruchamianie:
+```
+python zadanie3.py
+```
