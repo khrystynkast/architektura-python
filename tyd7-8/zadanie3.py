@@ -1,6 +1,6 @@
 import numpy as np
 
-# Nowoczesne filmy z losowymi embeddingami VECTOR(3)
+# Filmy
 filmy = {
     "Dune: Part Two (2024)":                     np.array([0.9, 0.2, 0.85]),
     "Oppenheimer (2023)":                        np.array([0.88, 0.15, 0.8]),
@@ -22,7 +22,7 @@ def semantic_search(query_vec, database, top_k=3):
     wyniki.sort(key=lambda x: x[1], reverse=True)
     return wyniki[:top_k]
 
-# Zapytanie — np. "coś jak sci-fi"
+# Zapytanie 
 query = np.array([0.85, 0.25, 0.9])
 
 results = semantic_search(query, filmy, top_k=3)
