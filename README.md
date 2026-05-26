@@ -1,5 +1,5 @@
 # Architektura aplikacji w Pythonie 
-### Zadania tydzień 1–2
+## Zadania tydzień 1–2
 
 Repozytorium zawiera rozwiązania zadań z przedmiotu Architektura aplikacji w Pythonie.  
 W folderze `tyd1-2` znajdują się wszystkie pliki wykonane w ramach pierwszych dwóch tygodni zajęć.
@@ -14,7 +14,7 @@ Dokumentacja i konfiguracja
 
 ---
 
-## Zadania z tygodnia 1 (zad1_x.py)
+### Zadania z tygodnia 1 (zad1_x.py)
 
 Pliki:
 - zad1_1.py
@@ -35,7 +35,7 @@ Każdy plik zawiera osobne zadanie programistyczne z podstaw Pythona:
 
 ---
 
-## Zadania z tygodnia 2 (zad2_x.py)
+### Zadania z tygodnia 2 (zad2_x.py)
 
 - zad2_1.py
 Zadanie dotyczące pracy z modułami, importami lub strukturą programu.
@@ -59,7 +59,7 @@ Plik testowy
 
 --- 
 
-### Zadania tydzień 3-4
+## Zadania tydzień 3-4
 
 Repozytorium zawiera rozwiązania zadań z przedmiotu Architektura aplikacji w Pythonie dotyczących programowania współbieżnego i równoległego.
 W folderze`tyd3-4`  znajdują się wszystkie pliki wykonane w ramach tygodnia 3–4.
@@ -75,7 +75,7 @@ lab2_functions.py — funkcje pomocnicze wykorzystywane w zadaniu 3
 
 ---
 
-## Zadanie 1 - Cat Facts API (Threading)
+### Zadanie 1 - Cat Facts API (Threading)
 
 Plik: `zadanie_1.py`
 
@@ -98,7 +98,7 @@ Technologie:
 
 ---
 
-## Zadanie 2 — Producent–Konsumenci (Queue + Threads)
+### Zadanie 2 — Producent–Konsumenci (Queue + Threads)
 
 Plik: `zadanie_2.py`
 
@@ -117,7 +117,7 @@ Technologie:
 
 ---
 
-## Zadanie 3 — Multiprocessing (CPU-bound)
+### Zadanie 3 — Multiprocessing (CPU-bound)
 
 Plik: `zadanie_3.py`
 
@@ -135,7 +135,7 @@ Technologie:
 * pomiar czasu
 
 ---
-### Zadania tydzień 5-6
+## Zadania tydzień 5-6
 
 Folder `tyd5-6` zawiera implementację klasy Product oraz zestaw testów jednostkowych przygotowanych w dwóch technologiach: unittest oraz pytest.
 
@@ -153,7 +153,7 @@ Folder `tyd5-6` zawiera implementację klasy Product oraz zestaw testów jednost
 
 ---
 
-## Zadanie 1 - Implementacja klasy Product i testy jednostkowe w unittest
+### Zadanie 1 - Implementacja klasy Product i testy jednostkowe w unittest
 
 Plik: `product.py`
 Plik: `tests/test_product_unittest.py`
@@ -179,7 +179,7 @@ python -m unittest discover -v
 
 ---
 
-## Zadanie 2 + dodatkowe zadanie — Testy jednostkowe w pytest
+### Zadanie 2 + dodatkowe zadanie — Testy jednostkowe w pytest
 
 Plik: `tests/test_product_pytest.py`
 
@@ -196,7 +196,7 @@ pytest tests/test_product_pytest.py -v
 ```
 
 ---
-### Zadania tydzień 7-8
+## Zadania tydzień 7-8
 
 Folder `tyd7-8` zawiera rozwiązania zadań dotyczących pracy z bazami danych SQL oraz NoSQL (MongoDB), a także symulację wyszukiwania wektorowego (vector search) z użyciem numpy.
 
@@ -211,7 +211,7 @@ Folder `tyd7-8` zawiera rozwiązania zadań dotyczących pracy z bazami danych S
 
 ---
 
-## Zadanie 1 - Random User API + SQL (PostgreSQL lub SQLite)
+### Zadanie 1 - Random User API + SQL (PostgreSQL lub SQLite)
 
 Plik: `zadanie1.py`
 
@@ -253,7 +253,7 @@ python zadanie1.py
 
 ---
 
-## Zadanie 2 - MongoDB + API GeckoTerminal
+### Zadanie 2 - MongoDB + API GeckoTerminal
 
 Plik: `zadanie2.py`
 
@@ -278,7 +278,7 @@ python zadanie2.py
 
 ```
 
-## Zadanie 3 - BONUS - Wyszukiwanie wektorowe (symulacja pgvector)
+### Zadanie 3 - BONUS - Wyszukiwanie wektorowe (symulacja pgvector)
 
 Plik: `zadanie3.py`
 
@@ -296,4 +296,67 @@ Technologie:
 Uruchamianie:
 ```
 python zadanie3.py
+```
+
+---
+
+### Zawartość folderu `tyd9-10`
+
+`chicago_crimes_analysis.py` - analiza danych o przestępczości w Chicago przy użyciu PySpark oraz budowa modelu klasyfikacji Machine Learning (Random Forest)
+`chicago_crimes_sample.csv` - plik zawiera próbkę oficjalnych danych o przestępczości w Chicago
+
+---
+
+### Zadanie 1 - Analiza danych Chicago Crimes z użyciem PySpark & ML
+
+Plik: `chicago_crimes_analysis.py`
+
+Program przetwarza i analizuje zbiór danych o przestępstwach w Chicago (`chicago_crimes_sample.csv`) przy użyciu Apache Spark, a następnie buduje model klasyfikacji wieloklasowej.
+
+### Główne etapy przetwarzania:
+
+1. **Inicjalizacja sesji Spark:** Zwiększenie pamięci sterownika i wykonawcy do 4 GB w celu zapewnienia stabilności.
+2. **Czyszczenie danych:** Usunięcie duplikatów i wartości `null` z kluczowych kolumn oraz ręczne parsowanie dat w formacie ISO (`yyyy-MM-dd'T'HH:mm:ss.SSS`).
+3. **Inżynieria cech (Feature Engineering):** * Wyciąganie godziny i dnia tygodnia z daty.
+* Kategoryzacja pory dnia za pomocą funkcji UDF (`noc`, `rano`, `dzien`, `wieczor`).
+* Mapowanie typów przestępstw na ogólne kategorie za pomocą mechanizmu `broadcast join`.
+
+
+4. **Zapis danych:** Eksport oczyszczonych danych do formatu Parquet z partycjonowaniem po roku (`partitionBy("year")`).
+5. **Agregacje i Analityka:**
+* Statystyki przestępstw według lokalizacji, pory dnia i typu.
+* Zaawansowana agregacja z wyliczaniem unikalnych lokalizacji (`countDistinct`).
+* Wyświetlenie planu wykonania zapytania za pomocą `.explain(mode="extended")`.
+
+
+6. **Machine Learning Pipeline:**
+* Przygotowanie cech kategorycznych (`StringIndexer` + `OneHotEncoder`).
+* Złożenie wektora cech za pomocą `VectorAssembler`.
+* Trenowanie modelu `RandomForestClassifier` (30 drzew, max głębokość 5).
+* Ewaluacja modelu za pomocą metryki `accuracy` (`MulticlassClassificationEvaluator`).
+
+
+
+```python
+df_clean = df_clean.withColumn("ParsedDate", F.to_timestamp("date", "yyyy-MM-dd'T'HH:mm:ss.SSS"))
+df_enriched = df_clean.join(F.broadcast(df_dict), on="primary_type", how="left")
+pipeline = Pipeline(stages=indexers + encoders + [assembler, rf])
+
+```
+
+### Technologie:
+
+* `pyspark` (Spark SQL, Spark ML)
+* `numpy` (wymagany przez Spark ML)
+* Random Forest Classifier
+* Parquet format
+
+### Uruchamianie:
+
+Przed uruchomieniem upewnij się, że masz zainstalowane wymagane pakiety w swoim środowisku wirtualnym (`numpy` oraz `pyspark`).
+
+```bash
+pip install numpy pyspark
+python chicago_crimes_analysis.py
+
 ```
