@@ -297,6 +297,10 @@ Uruchamianie:
 ```
 python zadanie3.py
 ```
+---
+### Zadania tydzień 9-10
+
+Folder tyd9-10 zawiera rozwiązanie zadania polegającego na zaawansowanej analizie wielkich zbiorów danych o przestępczości w Chicago przy użyciu Apache Spark (PySpark), realizację procesów czyszczenia, wzbogacania (Broadcast Join) i inżynierii cech, zapis danych do partycjonowanego formatu Parquet, a także budowę i ewaluację kompletnego potoku uczenia maszynowego (Machine Learning Pipeline) z modelem RandomForestClassifier.
 
 ---
 
@@ -360,3 +364,68 @@ pip install numpy pyspark
 python chicago_crimes_analysis.py
 
 ```
+---
+
+### Zadania tydzień 11-12
+
+Folder tyd11-12 zawiera implementację autorskiego frameworku Data Quality (kontraktu danych oraz walidatora) w czystym Pythonie, służącego do automatycznej weryfikacji struktury i czystości biznesowej datasetów (na przykładzie IMDB) przed ich przekazaniem do dalszych etapów potoku przetwarzania lub modelowania, wraz z generowaniem raportów walidacyjnych w formacie JSON.
+
+---
+
+### Zawartość folderu `tyd11-12`
+
+* `zadanie_6_1.py` — implementacja frameworku Data Quality (kontraktu danych i walidatora) w czystym Pythonie
+* `workspace/` — katalog roboczy przeznaczony na generowane raporty z walidacji
+* `workspace/data_quality_report.json` — wygenerowany automatycznie raport jakości danych z testu IMDB
+
+---
+
+### Zadanie 1 — Kontrakt danych + raport JSON (Lab 6 — Data Quality)
+
+Plik: `zadanie_6_1.py`
+
+Program implementuje lekki, produkcyjny mechanizm **Data Quality Framework** służący do weryfikacji i zapewniania integralności danych wejściowych w potoku przetwarzania (pipeline) przed etapem trenowania modeli Machine Learning.
+
+### Główne etapy przetwarzania:
+
+1. **Definicja Kontraktu (DataContract):** Tworzenie deklaratywnych reguł sprawdzających strukturalną oraz biznesową poprawność zestawu danych przy użyciu obiektów klasy `Rule`.
+2. **Implementacja poziomów Severity:** Przypisywanie do każdej reguły stopnia krytyczności (`info`, `warning`, `error`), pozwalającego odróżnić drobne anomalie od błędów krytycznych.
+3. **Mechanizm Fail-Fast (DataValidator):** Automatyczne przerywanie potoku i rzucanie wyjątku `ValueError` w momencie, gdy jakakolwiek reguła oznaczona jako `error` nie zostanie spełniona.
+4. **Weryfikacja jakości dla zestawu IMDB:** Walidacja danych pod kątem 6 rygorystycznych reguł biznesowych:
+   * `no_nulls` — całkowity brak wartości nieokreślonych w kolumnach kluczowych.
+   * `labels_in_set` — sprawdzenie poprawności klasyfikacji etykiet docelowych.
+   * `min_word_count` / `max_word_count` — eliminacja zbyt krótkich szumów oraz zbyt długich anomalii tekstowych.
+   * `no_duplicates` — unikanie duplikacji danych treningowych.
+   * `class_balance` — kontrola zrównoważenia proporcji między klasami pozytywnymi a negatywnymi.
+5. **Obsługa reguł ostrzegawczych (Bonus):** Implementacja testu `no_html_tags` z poziomem `warning`, która rejestruje występowanie tagów HTML w raporcie, lecz nie zatrzymuje działania programu.
+6. **Eksport raportu:** Zrzucenie całego wyniku walidacji wraz z precyzyjnym znacznikiem czasu (*timestamp*) do ujednoliconego pliku JSON.
+
+```python
+imdb_contract.add_rule("no_nulls", check_no_nulls, severity="error")
+imdb_contract.add_rule("no_html_tags", check_no_html_tags, severity="warning")
+final_report = validator.validate(df_imdb)
+
+```
+
+### Technologie:
+
+* `pandas` (zarządzanie strukturami danych i analiza statystyczna)
+* `json` / `os` (manipulacja systemem plików oraz serializacja raportu)
+* `dataclasses` (strukturyzacja reguł walidacyjnych)
+* Czysty Python 3.x (implementacja silnika walidatora)
+
+### Uruchamianie:
+
+Przed uruchomieniem skryptu upewnij się, że masz utworzone i aktywowane środowisko wirtualne `.venv` oraz zainstalowaną bibliotekę `pandas`.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install pandas
+python zadanie_6_1.py
+```
+* `zadanie_6_1.py` — implementacja frameworku Data Quality (kontraktu danych i walidatora) w czystym Pythonie
+* `_workspace/` — katalog roboczy przeznaczony na generowane raporty z walidacji
+* `_workspace/data_quality_report.json` — wygenerowany automatycznie raport jakości danych z testu IMDB
+
+---
