@@ -11,6 +11,7 @@ W folderze `tyd1-2` znajdują się wszystkie pliki wykonane w ramach pierwszych 
 Dokumentacja i konfiguracja
 - konfiguracja_srodowiska.md - instrukcja tworzenia i aktywacji środowiska wirtualnego (venv)
 - python_boost_pack_weeks_1_2.md - materiały i notatki do tygodnia 1–2
+- zadanie 1.1 z pliku AAA_Zestaw_Zaliczeniowy 
 
 ---
 
@@ -59,6 +60,28 @@ Plik testowy
 
 --- 
 
+### Dodane zadanie z AAP_Zestaw_Zaliczeniowy (Lab 1 — Dekoratory)
+Do folderu tyd1-2 został dodany nowy folder:
+`zad1.1_`
+
+W nim znajduje się plik:
+`lab1_dekoratory.py`
+
+Plik zawiera kompletne rozwiązanie zadania 1.1 — Dekoratory z zestawu zaliczeniowego:
+- implementację dekoratora @retry
+- implementację dekoratora @cache_to_disk
+- funkcję testową flaky_fetch z 50% szansą błędu
+- eksperyment 100 wywołań
+- porównanie wyniku z teorią
+- zapis cache do folderu flaky_cache/
+
+python lab1_dekoratory.py
+Wynik eksperymentu:
+```
+Sukcesy: 97/100
+```
+---
+
 ## Zadania tydzień 3-4
 
 Repozytorium zawiera rozwiązania zadań z przedmiotu Architektura aplikacji w Pythonie dotyczących programowania współbieżnego i równoległego.
@@ -68,10 +91,12 @@ W folderze`tyd3-4`  znajdują się wszystkie pliki wykonane w ramach tygodnia 3�
 
 ### Zawartość folderu `tyd3-4`
 
-Lab2_Concurrency_Multi_MAIN_FILE.ipynb — notebook z zajęć (wprowadzenie do threading, queue, multiprocessing)
+- Lab2_Concurrency_Multi_MAIN_FILE.ipynb — notebook z zajęć (wprowadzenie do threading, queue, multiprocessing)
 
-lab2_functions.py — funkcje pomocnicze wykorzystywane w zadaniu 3
+- lab2_functions.py — funkcje pomocnicze wykorzystywane w zadaniu 3
 (`is_prime`, `find_primes`, `calculate_power_sum`)
+
+- lab2_multiprocessing_sentiment.py  - Współbieżność i równoległość
 
 ---
 
@@ -133,6 +158,32 @@ Technologie:
 * `multiprocessing.Pool`
 * mapowanie funkcji na wiele procesów
 * pomiar czasu
+---
+### Dodane zadanie z AAP_Zestaw_Zaliczeniowy (Lab 2 — Współbieżność)
+Do folderu tyd3-4 został dodany nowy folder:
+`zad2.1_`
+W nim znajduje się plik:
+`lab2_multiprocessing_sentiment.py`
+Plik zawiera kompletne rozwiązanie zadania 2.1 — Multiprocessing dla CPU-bound z zestawu zaliczeniowego:
+- implementację funkcji sentiment_score(text)
+- porównanie trzech wariantów:
+- sekwencyjny
+- ThreadPool
+- multiprocessing.Pool
+- pobranie 5000 recenzji IMDB
+- pomiar czasu wykonania
+- wykres słupkowy (matplotlib)
+
+Kod zaczynał się od szkicu:
+```
+def sentiment_score(text: str) -> int:
+    """CPU-bound: tokenizuj, policz pozytywne minus negatywne."""
+    raise NotImplementedError
+```
+i został w pełni zaimplementowany w pliku lab2_multiprocessing_sentiment.py.
+
+Na macOS multiprocessing działa wolniej niż wersja sekwencyjna, ponieważ system używa trybu spawn, który uruchamia każdy proces od nowa i ponownie ładuje wszystkie biblioteki.
+Na Linux/Windows multiprocessing jest znacznie szybszy (4–6×), ponieważ używa fork, który kopiuje pamięć procesu natychmiast, bez ponownego ładowania środowiska.
 
 ---
 ## Zadania tydzień 5-6
@@ -193,6 +244,34 @@ Uruchamianie:
 pytest -v
 
 pytest tests/test_product_pytest.py -v 
+```
+---
+
+### Dodatkowe zadanie — Tokenizer + pytest (Lab 3 — Testowanie)
+W folderze _workspace/ znajduje się pełna implementacja zadania 3.1 z zestawu zaliczeniowego.
+Pliki:
+- tokenizer.py — implementacja klasy Tokenizer
+- test_tokenizer.py — zestaw testów pytest
+
+Zakres implementacji
+- usuwanie HTML (strip_html=True)
+- konwersję do lowercase (lower=True)
+- tokenizację regexem \w+ (obsługa polskich znaków)
+- filtrowanie tokenów krótszych niż min_length
+- budowanie słownika (vocab) z wielu tekstów
+
+Testy pytest
+- fixturę tokenizer
+- fixturę imdb_sample (20 recenzji IMDB)
+- parametryzację 6 przypadków brzegowych
+- test deduplikacji słownika
+- test filtra długości
+- test integracyjny (słownik > 500 tokenów)
+- test oznaczony xfail
+
+Wynik uruchomienia:
+``` 
+9 passed, 1 xfailed
 ```
 
 ---
@@ -298,6 +377,49 @@ Uruchamianie:
 python zadanie3.py
 ```
 ---
+
+### Zadanie 4 — NoSQL-style w SQLite (JSON column)
+Plik: `zadanie4.py`
+Zadanie pokazuje, że SQLite może działać jak NoSQL, jeśli użyjemy kolumny JSON i funkcji `json_extract`.
+ 
+Schemat dokumentowy
+Tabela:
+```
+reviews_json(id INTEGER PRIMARY KEY, doc TEXT)
+```
+Każdy rekord to dokument JSON:
+```
+json
+{
+  "text": "...",
+  "label": 0/1,
+  "stats": {
+    "word_count": ...,
+    "sentiment_hint": "pos" | "neg"
+  },
+  "tags": ["pierwsze", "trzy", "dlugie_slowa"]
+}
+```
+
+Załadowano 2000 recenzji IMDB jako dokumenty JSON
+Dla każdej recenzji:
+`sentiment_hint` = `"pos"` lub `"neg"`
+`word_count` = liczba słów
+`tags` = pierwsze 3 słowa dłuższe niż 5 znaków
+
+Zapytania NoSQL-style (json_extract)
+1. Rozkład klas
+2. Średni word_count per klasa
+3. Dokumenty, gdzie tags zawiera „movie”
+4. Top 5 najdłuższych pozytywnych recenzji
+
+Porównanie rozmiaru baz
+```
+SQL schema (reviews):               0 bajtow
+JSON schema (reviews_json): 3,518,464 bajtow
+```
+
+---
 ### Zadania tydzień 9-10
 
 Folder tyd9-10 zawiera rozwiązanie zadania polegającego na zaawansowanej analizie wielkich zbiorów danych o przestępczości w Chicago przy użyciu Apache Spark (PySpark), realizację procesów czyszczenia, wzbogacania (Broadcast Join) i inżynierii cech, zapis danych do partycjonowanego formatu Parquet, a także budowę i ewaluację kompletnego potoku uczenia maszynowego (Machine Learning Pipeline) z modelem RandomForestClassifier.
@@ -364,6 +486,30 @@ pip install numpy pyspark
 python chicago_crimes_analysis.py
 
 ```
+---
+
+### Zadanie 5.1 — Window Functions na recenzjach IMDB
+Zadanie polega na wykonaniu zaawansowanej analityki na zbiorze IMDB z użyciem PySpark Window Functions, czyli operacji niemożliwych do wykonania zwykłym `groupBy`.
+
+Zakres zadania:
+- Wczytanie 2000 recenzji IMDB do Spark DataFrame.
+- Dodanie kolumn: `id` (monotonically increasing), `word_count` (liczba słów).
+- Zastosowanie funkcji okienkowych (`Window.partitionBy`, `orderBy`, `rowsBetween`).
+
+Wykonane operacje:
+1. Ranking recenzji w obrębie klasy (label)  
+Sortowanie po długości (`word_count`) i nadanie rankingu — najdłuższe recenzje mają `rank = 1`.
+2. Top‑3 najdłuższe recenzje per klasa  
+Wybranie trzech najdłuższych recenzji dla każdej klasy (0 i 1).
+3. Różnica od średniej długości w klasie  
+Obliczenie:
+`word_count - avg(word_count) OVER (PARTITION BY label)`
+Pokazuje, o ile dana recenzja odbiega od średniej swojej klasy.
+4. Moving average (okno 50)  
+Dla każdej klasy policzono średnią długość z ostatnich 50 recenzji, sortując po `id`.
+5. Wizualizacja wyników  
+Wykres liniowy (matplotlib) przedstawiający przebieg moving average osobno dla recenzji pozytywnych i negatywnych.
+
 ---
 
 ### Zadania tydzień 11-12
